@@ -1,0 +1,13 @@
+<html>
+{% extends 'base.html' %}
+
+{% block title %}
+    Look who we are!
+{% endblock %}
+
+
+{% block body %}
+    <img src= "{{ url_for('static', filename='img/phone.png') }}" align="right">
+    <h1>We care about your music</h1>
+{% endblock %}
+</html>
