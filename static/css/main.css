@@ -1,13 +1,12 @@
-/*
-body {
-    background-color: rgb(150, 200, 255);
-}
-*/
-
 #footer {
    position:fixed;
    left:0px;
    bottom:10px;
    height:30px;
    width:100%;
+}
+
+.head {
+    height: 64px;
+    width: 53px;
 }

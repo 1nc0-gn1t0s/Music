@@ -8,6 +8,55 @@
 
 {% block body %}
     <img src= "{{ url_for('static', filename='img/phone.png') }}" align="right">
-    <h1>Registration</h1>
+    <br>
+    <h1></h1>
+    <div class="row g-5">
+        <h1>Sigh up to get started!</h1>
+        <div class="col-md-7 col-lg-8">
+            <h4 class="mb-3">Registration</h4>
+            <form class="needs-validation" novalidate="" method="post">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label for="nickname" class="form-label">Nickname</label>
+                            <input type="text" class="form-control" id="nickname" name="nickname" placeholder="Polycarp" required="">
+                                <div class="invalid-feedback">
+                                    Please enter your shipping address.
+                                </div>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="username" class="form-label">Username</label>
+                            <div class="input-group has-validation">
+                                <span class="input-group-text">@</span>
+                                <input type="text" class="form-control" id="username" name="username" placeholder="Polycarp3000" required="">
+                                    <div class="invalid-feedback">
+                                        Your username is required.
+                                    </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="text" class="form-control" id="password" name="password" placeholder="Sobaka_Polycarpa:)" value="" required="">
+                                <div class="invalid-feedback">
+                                    Valid first name is required.
+                                </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label for="repeatPassword" class="form-label">Repeat password</label>
+                            <input type="text" class="form-control" id="repeatPassword" name="repeatPassword" placeholder="Sobaka_Polycarpa:)" value="" required="">
+                                <div class="invalid-feedback">
+                                    Valid last name is required.
+                                </div>
+                        </div>
+                    </div>
+                <h4 class="mb-3"></h4>
+                <hr class="my-4">
+                <button class="w-100 btn btn-primary btn-lg" type="submit">Continue</button>
+                <hr class="my-4">
+            </form>
+        </div>
+    </div>
 {% endblock %}
 </html>

@@ -1,17 +1,28 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect
+from sigh_up_login import sigh_up, login
+from add_song import add_song
 
 
 app = Flask(__name__)
 
 
-@app.route('/registration')
+@app.route('/registration', methods=['GET', 'POST'])
 def registration():
+    if request.method == 'POST':
+        info = list(request.form)
+        sigh_up(info)
+        return redirect('/user')
     return render_template('registration.html')
 
 
 @app.route('/')
 def home():
     return render_template('home.html')
+
+
+@app.route('/user')
+def user():
+    return render_template('user.html')
 
 
 @app.route('/login')
