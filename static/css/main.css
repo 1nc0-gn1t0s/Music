@@ -10,3 +10,12 @@
     height: 64px;
     width: 53px;
 }
+
+figure {
+  margin: 0;
+}
+
+.cover {
+    height: 163px;
+    width: 163px;
+}

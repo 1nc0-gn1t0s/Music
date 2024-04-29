@@ -1,10 +1,25 @@
 <html>
-{% extends 'base.html' %}
+{% extends 'base_user.html' %}
 
 {% block title %}
-    Account
+    Profile
 {% endblock %}
 
 {% block body %}
+    <div class="container mt-5">
+        {% for song in songs %}
+            <div class="alert alert-info" role="alert">
+                <img class="cover" src="{{ url_for('static', filename=song.photo_path) }}" align="right">
+                 <figure>
+                     <h2 class="alert-heading">{{song.title}}</h2>
+                     <small>{{song.singer}}</small>
+                     <hr>
+                     <audio controls>
+                         <source src="{{ url_for('static', filename=song.song_path) }}" type="audio/mpeg">
+                     </audio>
+                 </figure>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}
 </html>
