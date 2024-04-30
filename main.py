@@ -1,57 +1,13 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager, login_user, logout_user, current_user, UserMixin, login_required
-from werkzeug.security import check_password_hash, generate_password_hash
+from flask import render_template, request, redirect, url_for, flash
+from flask_login import LoginManager, login_user, logout_user, login_required
+from werkzeug.security import check_password_hash
+
+from api import make_cover, add_song, make_text_path
+from models import app, User, Song, create_user, get_user_by_username
 
 
-app = Flask(__name__)
-app.secret_key = 'just a really secret sentence'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
-db = SQLAlchemy(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
-
-
-class User(db.Model, UserMixin):
-    """
-    Класс пользователя
-    """
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(300), nullable=False)
-    nickname = db.Column(db.Text, nullable=False)
-    password_hash = db.Column(db.String(300), nullable=False)
-
-    def __init__(self, nickname, username, password_hash):
-        self.nickname = nickname
-        self.username = username
-        self.password_hash = password_hash
-
-    def __repr__(self):
-        return '<User {}>'.format(self.username)
-
-
-class Song(db.Model):
-    """
-    Класс трека
-    """
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(300), nullable=False)
-    singer = db.Column(db.String(300), nullable=False)
-    text_path = db.Column(db.String(300), nullable=False)
-    song_path = db.Column(db.String(300), nullable=False)
-    photo_path = db.Column(db.String(300), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-
-    def __init__(self, title, singer, text_path, song_path, photo_path, user_id):
-        self.title = title
-        self.singer = singer
-        self.text_path = text_path
-        self.song_path = song_path
-        self.photo_path = photo_path
-        self.user_id = user_id
-
-    def __repr__(self):
-        return '<Song {}>'.format(self.title)
 
 
 @login_manager.user_loader
@@ -67,48 +23,24 @@ def load_user(user_id):
 @app.route('/user/<username>')
 @login_required
 def user(username):
-    user = User.query.filter_by(username=username).first_or_404()
-    songs = Song.query.filter_by(user_id=user.id).order_by(Song.title).all()
-    return render_template('user.html', user=user, songs=songs)
-
-
-def create_user(nickname, username, password):
     """
-    Функция для добавления пользователя в базу данных
-    :param nickname: nickname
+    Возвращает страницу пользователя
     :param username: username
-    :param password: password
-    :return:
+    :return: html
     """
-    new_user = User(nickname=nickname, username=username, password_hash=generate_password_hash(password))
-    db.session.add(new_user)
-    db.session.commit()
-
-
-def get_user_by_username(username):
-    """
-    Функция для получения пользователя по username
-    :param username: username
-    :return: None
-    """
-    return User.query.filter_by(username=username).first()
-
-
-def check_password(user, password):
-    """
-    Функция для проверки пароля
-    :param user: user
-    :param password: password
-    :return: Bool
-    """
-    return check_password_hash(user.password_hash, password)
+    user_0 = User.query.filter_by(username=username).first_or_404()
+    songs = Song.query.filter_by(user_id=user_0.id).order_by(Song.title).all()
+    return render_template('user.html', user=user_0, songs=songs)
 
 
 @app.route('/registration', methods=['GET', 'POST'])
 def registration():
+    """
+    Функция для регистрации пользователя; открывает html соответствующей страницы
+    :return: html
+    """
     if request.method == 'POST':
         info = list(dict(request.form).values())
-        print(info)
         nickname, username, password, repeat_password = info[0], info[1], info[2], info[3]
         if not (nickname and username and password and repeat_password):
             flash('All fields must be filled in.')
@@ -132,26 +64,28 @@ def registration():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    """
+    Функция для входа пользователей в аккаунты; открывает html соответствующей страницы
+    :return: html
+    """
     if request.method == 'POST':
         info = list(dict(request.form).values())
         username, password = info[0], info[1]
-        print(info)
         if not username or not password:
             flash('All fields must be filled in.')
             return redirect(url_for('login'))
 
-        user = get_user_by_username(username)
-        print(user)
+        user_1 = get_user_by_username(username)
 
-        if not user:
+        if not user_1:
             flash('User is not found.')
             return redirect(url_for('login'))
 
-        if not check_password_hash(user.password_hash, password):
+        if not check_password_hash(user_1.password_hash, password):
             flash('Wrong password.', 'error')
             return redirect(url_for('login'))
 
-        login_user(user)
+        login_user(user_1)
         return redirect(url_for('user', username=username))
 
     return render_template('login.html')
@@ -160,24 +94,58 @@ def login():
 @app.route('/logout')
 @login_required
 def logout():
+    """
+    Функция для выхода из аккаунта пользователя
+    :return: home html
+    """
     logout_user()
     return redirect('/')
 
 
 @app.route('/about')
 def about():
+    """
+    Возвращает страницу 'О нас'
+    :return: html
+    """
     return render_template('about.html')
 
 
 @app.route('/')
 def index():
+    """
+    Возвращает домашнюю страницу
+    :return: html
+    """
     return render_template('index.html')
 
 
-@app.route('/upload_new')
+@app.route('/upload_new/<username>', methods=['GET', 'POST'])
 @login_required
-def upload_new():
-    return render_template('upload_new.html')
+def upload_new(username):
+    """
+    Возвращает страницу добавления нового трека
+    :return: html
+    """
+    user_1 = get_user_by_username(username)
+
+    if request.method == 'POST':
+        info = list(dict(request.form).values())
+        title, singer, filepath, text, desc = info[0], info[1], info[2], info[3], info[4]
+
+        if not filepath:
+            flash('Choose the file please.')
+            return redirect(url_for('upload_new', username=username))
+
+        if not (title and singer):
+            flash('The fields "title" and "singer" must be filled in.')
+            return redirect(url_for('upload_new', username=username))
+
+        photo_path = make_cover(info, user_1)
+        text_path = make_text_path(info, user_1)
+        add_song(title, singer, filepath, text_path, photo_path, user_1)
+        return redirect(url_for('user', username=username))
+    return render_template('upload_new.html', user=user_1)
 
 
 if __name__ == '__main__':
