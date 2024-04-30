@@ -7,7 +7,23 @@
 
 
 {% block body %}
-    <img src= "{{ url_for('static', filename='img/phone.png') }}" align="right">
+    <img src= "{{ url_for('static', filename='img/monster.png') }}" align="right">
     <h1>We care about your music</h1>
+    <br>
+    <hr>
+    <br>
+    <div class="list-group mb-2">
+        <div class="alert alert-info" role="alert">
+            <h4 class="alert-heading">MUSIC KEEPER!</h4>
+            <br>
+            <p>Upload songs.</p>
+            <p>Make covers for them.</p>
+            <p>Listen to music.</p>
+            <p>Keep your own melodies.</p>
+            <hr>
+            <p class="mb-0">Just try.</p>
+        </div>
+    </div>
+    <img src= "{{ url_for('static', filename='img/long.png') }}" align="left">
 {% endblock %}
 </html>

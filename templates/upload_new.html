@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add new song!</title>
+    <meta http-equiv="X-UA-Compatible" content="ie-edge">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+            <div class="col-md-3 mb-2 mb-md-0">
+                <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none">
+                    <img class="head" src="{{ url_for('static', filename='img/headphones.png') }}">
+                </a>
+            </div>
+
+            <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+                <li><a href="/" class="nav-link px-2 link-secondary">Home</a></li>
+            </ul>
+
+            <div>
+                <h3>Hello, {{user.nickname}}</h3>
+                <h6>@{{ user.username }}</h6>
+            </div>
+
+            <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+                <li><a href="{{ url_for('about') }}" class="nav-link px-2">About</a></li>
+            </ul>
+
+            <div class="col-md-3 text-end">
+                <a href="/user/{{user.username}}" class="btn btn-outline-primary">My Account</a>
+                <a href="/logout" class="btn btn-outline-primary">Log Out</a>
+            </div>
+        </header>
+    </div>
+
+    <img src= "{{ url_for('static', filename='img/pattern_2.png') }}" align="left">
+    <br>
+    <h1></h1>
+    <div class="row g-5">
+        <h1>Add new song!</h1>
+        <div class="col-md-7 col-lg-8">
+            <h4 class="mb-3"></h4>
+            <form class="needs-validation" novalidate="" method="post">
+                <div class="row g-3">
+                    <div class="col-25">
+                        <label for="title" class="form-label">Title</label>
+                        <input type="text" class="form-control" id="title" name="title" placeholder="Heathens" required="">
+                    </div>
+
+                    <div class="col-12">
+                        <label for="singer" class="form-label">Singer</label>
+                        <input type="text" class="form-control" id="singer" name="singer" placeholder="Twenty One Pilot" required="">
+                    </div>
+
+                    <div>
+                        <label for="song" class="form-label">Song</label>
+                        <input type="file" id="song" name="song" accept=".mp3"/>
+                    </div>
+
+                    <div>
+                        <label for="text" class="form-label">Text</label>
+                        <textarea id="text" name="text" rows="10" cols="85" placeholder="Please write in the text of the song if exists."></textarea>
+                    </div>
+
+                    <div>
+                        <label for="photo-description" class="form-label">The description of the cover you need</label>
+                        <textarea id="photo-description" name="photo-description" rows="10" cols="85" placeholder="Please write in description of the cover if you need."></textarea>
+                    </div>
+                </div>
+
+                <br>
+
+                {% for msg in get_flashed_messages() %}
+                    <div class="flash">
+                        <div class="alert alert-info" role="alert">
+                            <h4 class="alert-heading">Error!</h4>
+                            <hr>
+                            <p class="mb-0">{{ msg }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+
+                <h4 class="mb-3"></h4>
+                <hr class="my-4">
+                <button class="w-100 btn btn-primary btn-lg" id="submit" type="submit">Continue</button>
+                <hr class="my-4">
+            </form>
+        </div>
+    </div>
+</body>
+</html>

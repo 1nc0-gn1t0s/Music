@@ -9,5 +9,17 @@
 {% block body %}
     <img src= "{{ url_for('static', filename='img/pattern_1.png') }}" align="right">
     <h1>About us</h1>
+    <br>
+    <hr>
+    <br>
+    <div class="list-group mb-2">
+        <div class="alert alert-info" role="alert">
+            <h4 class="alert-heading">Look!</h4>
+            <p>A service for storing music with automatic selection of cover art for a track by generating images from text using Chat GPT. The user can save tracks, for which he will need to download the file from the computer and write various parameters such as title, lyrics and artist. After this, a cover image will be generated based on the lyrics of the song (or its title, if there are no lyrics).</p>
+            <hr>
+            <p class="mb-0">Just try.</p>
+        </div>
+    </div>
+    <img src= "{{ url_for('static', filename='img/circle.png') }}">
 {% endblock %}
 </html>

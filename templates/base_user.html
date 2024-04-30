@@ -15,12 +15,22 @@
                     <img class="head" src="{{ url_for('static', filename='img/headphones.png') }}">
                 </a>
             </div>
+
+            <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+                <li><a href="/" class="nav-link px-2 link-secondary">Home</a></li>
+            </ul>
+
             <div>
-                <h3>Hello, {{user.username}}</h3>
-                <h6>@{{ user.nickname }}</h6>
+                <h3>Hello, {{user.nickname}}</h3>
+                <h6>@{{ user.username }}</h6>
             </div>
+
+            <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+                <li><a href="{{ url_for('about') }}" class="nav-link px-2">About</a></li>
+            </ul>
+
             <div class="col-md-3 text-end">
-                <button type="button" class="btn btn-outline-primary">Log Out</button>
+                <a href="/logout" class="btn btn-outline-primary">Log Out</a>
             </div>
         </header>
 
@@ -28,9 +38,10 @@
         <hr>
         <br>
         <div>
-            <button type="button" class="btn btn-primary">Add Song</button>
+            <button type="button" onclick="window.location.href='/upload_new/{{ user.username }}'" class="btn btn-primary">Add Song</button>
         </div>
         <h3>{% block body %}{% endblock %}</h3>
+        <br><br>
 
         <div id="footer">
             <footer class="container">
